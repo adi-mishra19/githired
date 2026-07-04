@@ -1,0 +1,17 @@
+[
+  {
+    "db_id": "placement_db",
+    "question": "Show me all data science jobs",
+    "SQL": "SELECT j.title, c.company_name, j.ctc_offered FROM jobs j JOIN companies c ON j.company_id = c.id WHERE j.title LIKE '%data%' OR j.title LIKE '%analyst%'"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Find companies in the finance industry",
+    "SQL": "SELECT company_name, location FROM companies WHERE industry = 'Finance'"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Show me applications submitted this week",
+    "SQL": "SELECT s.first_name, s.last_name, j.title, c.company_name FROM applications a JOIN students s ON a.student_id = s.id JOIN jobs j ON a.job_id = j.id JOIN companies c ON j.company_id = c.id WHERE a.applied_at >= DATE_SUB(NOW(), INTERVAL 1 WEEK)"
+  }
+]

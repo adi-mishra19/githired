@@ -1,0 +1,27 @@
+[
+  {
+    "db_id": "placement_db",
+    "question": "Show me all companies that visited in October",
+    "SQL": "SELECT DISTINCT c.company_name FROM companies c JOIN jobs j ON c.id = j.company_id WHERE MONTH(j.created_at) = 10"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "How many students are from Electronics department?",
+    "SQL": "SELECT COUNT(*) FROM students WHERE department = 'Electronics'"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Find all job positions in Bangalore",
+    "SQL": "SELECT j.title, c.company_name FROM jobs j JOIN companies c ON j.company_id = c.id WHERE j.location = 'Bangalore'"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Show me students who got offers",
+    "SQL": "SELECT s.first_name, s.last_name, c.company_name FROM students s JOIN applications a ON s.id = a.student_id JOIN jobs j ON a.job_id = j.id JOIN companies c ON j.company_id = c.id WHERE a.status = 'offered'"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "What is the average CGPA of placed students?",
+    "SQL": "SELECT AVG(s.cgpa) FROM students s JOIN applications a ON s.id = a.student_id WHERE a.status = 'selected'"
+  }
+]

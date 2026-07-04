@@ -1,0 +1,13 @@
+[
+  {
+    "db_id": "placement_db",
+    "table_names_original": ["users", "students", "companies", "jobs", "applications"],
+    "column_names_original": [
+      [0, "id"], [0, "email"], [0, "role"], [0, "is_approved"],
+      [1, "id"], [1, "user_id"], [1, "first_name"], [1, "last_name"], [1, "student_id"], [1, "department"], [1, "cgpa"],
+      [2, "id"], [2, "user_id"], [2, "company_name"], [2, "industry"], [2, "location"],
+      [3, "id"], [3, "company_id"], [3, "title"], [3, "description"], [3, "job_type"], [3, "ctc_offered"], [3, "created_at"],
+      [4, "id"], [4, "student_id"], [4, "job_id"], [4, "status"], [4, "applied_at"]
+    ]
+  }
+]

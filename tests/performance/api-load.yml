@@ -1,0 +1,113 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: "Warm up"
+    - duration: 120
+      arrivalRate: 10
+      name: "Ramp up load"
+    - duration: 180
+      arrivalRate: 20
+      name: "Sustained load"
+  processor: "./helpers.js"
+  variables:
+    studentEmail: "student@example.com"
+    companyEmail: "company@example.com"
+    password: "password123"
+
+scenarios:
+  - name: "Student Job Application Flow"
+    weight: 40
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ studentEmail }}"
+            password: "{{ password }}"
+          capture:
+            - json: "$.sessionToken"
+              as: "token"
+      - get:
+          url: "/api/student/jobs"
+          headers:
+            Authorization: "Bearer {{ token }}"
+      - get:
+          url: "/api/student/jobs/{{ $randomString() }}"
+          headers:
+            Authorization: "Bearer {{ token }}"
+      - think: 2
+      - post:
+          url: "/api/student/applications"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          json:
+            jobId: "{{ $randomString() }}"
+            resumeUrl: "https://example.com/resume.pdf"
+
+  - name: "Company Job Management"
+    weight: 30
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ companyEmail }}"
+            password: "{{ password }}"
+          capture:
+            - json: "$.sessionToken"
+              as: "token"
+      - get:
+          url: "/api/company/jobs"
+          headers:
+            Authorization: "Bearer {{ token }}"
+      - get:
+          url: "/api/company/applications"
+          headers:
+            Authorization: "Bearer {{ token }}"
+      - think: 3
+      - patch:
+          url: "/api/company/applications/{{ $randomString() }}"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          json:
+            status: "reviewing"
+
+  - name: "Public Job Browsing"
+    weight: 30
+    flow:
+      - get:
+          url: "/"
+      - get:
+          url: "/jobs"
+      - get:
+          url: "/api/jobs?page=1&limit=20"
+      - think: 1
+      - get:
+          url: "/api/jobs?search=engineer"
+
+  - name: "AI Query Performance"
+    weight: 10
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "admin@example.com"
+            password: "admin123"
+          capture:
+            - json: "$.sessionToken"
+              as: "token"
+      - post:
+          url: "/api/ai/query"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          json:
+            query: "How many applications this month?"
+            role: "admin"
+      - think: 5
+
+# Performance thresholds
+ensure:
+  maxErrorRate: 1  # Max 1% error rate
+  p95: 2000        # 95th percentile response time < 2s
+  p99: 5000        # 99th percentile response time < 5s
+

@@ -1,0 +1,102 @@
+[
+  {
+    "db_id": "placement_db",
+    "question": "Show me all companies that visited in September",
+    "SQL": "SELECT DISTINCT c.company_name FROM companies c JOIN jobs j ON c.id = j.company_id WHERE MONTH(j.created_at) = 9"
+  },
+  {
+    "db_id": "placement_db", 
+    "question": "How many students applied to Microsoft?",
+    "SQL": "SELECT COUNT(*) FROM applications a JOIN jobs j ON a.job_id = j.id JOIN companies c ON j.company_id = c.id WHERE c.company_name = 'Microsoft'"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "List all students with CGPA above 8.0",
+    "SQL": "SELECT first_name, last_name, cgpa FROM students WHERE cgpa > 8.0 ORDER BY cgpa DESC"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Show me placement statistics by department",
+    "SQL": "SELECT s.department, COUNT(*) as total_students, COUNT(CASE WHEN a.status = 'selected' THEN 1 END) as placed FROM students s LEFT JOIN applications a ON s.id = a.student_id GROUP BY s.department"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Which companies have the highest salary packages?",
+    "SQL": "SELECT c.company_name, MAX(j.ctc_offered) as max_salary FROM companies c JOIN jobs j ON c.id = j.company_id WHERE j.ctc_offered IS NOT NULL GROUP BY c.company_name ORDER BY max_salary DESC"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Find students who applied to more than 5 companies",
+    "SQL": "SELECT s.first_name, s.last_name, COUNT(a.id) as application_count FROM students s JOIN applications a ON s.id = a.student_id GROUP BY s.id, s.first_name, s.last_name HAVING COUNT(a.id) > 5"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Show me all software engineering jobs",
+    "SQL": "SELECT j.title, c.company_name, j.location, j.ctc_offered FROM jobs j JOIN companies c ON j.company_id = c.id WHERE j.title LIKE '%software%' OR j.title LIKE '%developer%'"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "What is the average salary offered by tech companies?",
+    "SQL": "SELECT AVG(j.ctc_offered) as avg_salary FROM jobs j JOIN companies c ON j.company_id = c.id WHERE c.industry = 'Technology' AND j.ctc_offered IS NOT NULL"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "List all pending applications",
+    "SQL": "SELECT s.first_name, s.last_name, j.title, c.company_name, a.status FROM applications a JOIN students s ON a.student_id = s.id JOIN jobs j ON a.job_id = j.id JOIN companies c ON j.company_id = c.id WHERE a.status = 'applied'"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Show me companies that posted jobs in the last month",
+    "SQL": "SELECT DISTINCT c.company_name FROM companies c JOIN jobs j ON c.id = j.company_id WHERE j.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Find students from Computer Science department with offers",
+    "SQL": "SELECT s.first_name, s.last_name, c.company_name, j.title FROM students s JOIN applications a ON s.id = a.student_id JOIN jobs j ON a.job_id = j.id JOIN companies c ON j.company_id = c.id WHERE s.department = 'Computer Science' AND a.status = 'offered'"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "What is the placement rate for each department?",
+    "SQL": "SELECT s.department, COUNT(*) as total, COUNT(CASE WHEN a.status = 'selected' THEN 1 END) as placed, ROUND(COUNT(CASE WHEN a.status = 'selected' THEN 1 END) * 100.0 / COUNT(*), 2) as placement_rate FROM students s LEFT JOIN applications a ON s.id = a.student_id GROUP BY s.department"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Show me all internship positions",
+    "SQL": "SELECT j.title, c.company_name, j.location, j.ctc_offered FROM jobs j JOIN companies c ON j.company_id = c.id WHERE j.job_type = 'internship'"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Which students have the highest CGPA?",
+    "SQL": "SELECT first_name, last_name, cgpa, department FROM students ORDER BY cgpa DESC LIMIT 10"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Find companies that haven't received any applications",
+    "SQL": "SELECT c.company_name FROM companies c LEFT JOIN jobs j ON c.id = j.company_id LEFT JOIN applications a ON j.id = a.job_id WHERE a.id IS NULL"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Show me application trends for the last 3 months",
+    "SQL": "SELECT DATE_FORMAT(a.applied_at, '%Y-%m') as month, COUNT(*) as applications FROM applications a WHERE a.applied_at >= DATE_SUB(NOW(), INTERVAL 3 MONTH) GROUP BY DATE_FORMAT(a.applied_at, '%Y-%m') ORDER BY month"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "List all full-time job positions with salary above 10 LPA",
+    "SQL": "SELECT j.title, c.company_name, j.ctc_offered FROM jobs j JOIN companies c ON j.company_id = c.id WHERE j.job_type = 'full-time' AND j.ctc_offered > 1000000"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Find students who applied to both Microsoft and Google",
+    "SQL": "SELECT s.first_name, s.last_name FROM students s JOIN applications a1 ON s.id = a1.student_id JOIN jobs j1 ON a1.job_id = j1.id JOIN companies c1 ON j1.company_id = c1.id JOIN applications a2 ON s.id = a2.student_id JOIN jobs j2 ON a2.job_id = j2.id JOIN companies c2 ON j2.company_id = c2.id WHERE c1.company_name = 'Microsoft' AND c2.company_name = 'Google'"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "What is the total number of applications received?",
+    "SQL": "SELECT COUNT(*) as total_applications FROM applications"
+  },
+  {
+    "db_id": "placement_db",
+    "question": "Show me companies by industry",
+    "SQL": "SELECT industry, COUNT(*) as company_count FROM companies GROUP BY industry ORDER BY company_count DESC"
+  }
+]
